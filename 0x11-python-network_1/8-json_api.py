@@ -8,20 +8,14 @@ from sys import argv
 
 
 if __name__ == "__main__":
-    """
-    takes in a letter and sends a POST request to
-    http://0.0.0.0:5000/search_user with the letter as a parameter
-    """
-    url = 'http://0.0.0.0:5000/search_user'
-    r = requests.get(url)
-    if len(argv) == 2:
-        r = requests.post(url, data={'q': argv[1]})
-    else:
-        r = requests.post(url, data={'q': ""})
+
+    data = {"q": argv[1] if len(argv) > 1 else ""}
+    request = requests.post("http://0.0.0.0:5000/search_user", data=data)
     try:
-        if r.json() == {}:
-            print("No result")
+        json = request.json()
+        if json:
+            print("[{}] {}".format(json.get("id"), json.get("name")))
         else:
-            print("[{}] {}".format(r.json().get('id'), r.json().get('name')))
+            print("No result")
     except:
         print("Not a valid JSON")
