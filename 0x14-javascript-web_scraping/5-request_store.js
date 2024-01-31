@@ -1,20 +1,12 @@
 #!/usr/bin/node
-const request = require('request');
-let fs = require('fs');
-const url = process.argv[2];
-const file = process.argv[3];
 
-function storeWebpage (url, file) {
-  request(url, function (error, response, body) {
-    if (error) {
-      console.log(error);
-    } else {
-      fs.writeFile(file, body, function (err) {
-        if (err) {
-          console.log(err);
-        }
-      });
+const request = require('request');
+const fs = require('fs');
+
+request(process.argv[2], function (_err, _res, body) {
+  fs.writeFile(process.argv[3], body, 'utf8', function (err) {
+    if (err) {
+      console.log(err);
     }
   });
-}
-storeWebpage(url, file);
+});
